@@ -396,7 +396,14 @@ class InMemoryStorage implements IStorage {
   async createTestimonial(testimonial: InsertTestimonial): Promise<Testimonial> {
     const newTestimonial: Testimonial = {
       id: Math.random().toString(36).substr(2, 9),
-      ...testimonial,
+      name: testimonial.name,
+      platform: testimonial.platform,
+      review: testimonial.review,
+      userImage: testimonial.userImage,
+      reviewDate: testimonial.reviewDate,
+      isActive: testimonial.isActive ?? true,
+      sortOrder: testimonial.sortOrder ?? 0,
+      rating: testimonial.rating ?? 5,
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -429,7 +436,13 @@ class InMemoryStorage implements IStorage {
   async createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage> {
     const newImage: GalleryImage = {
       id: Math.random().toString(36).substr(2, 9),
-      ...image,
+      title: image.title,
+      altText: image.altText,
+      imageUrl: image.imageUrl,
+      description: image.description ?? null,
+      isActive: image.isActive ?? true,
+      sortOrder: image.sortOrder ?? 0,
+      category: image.category ?? null,
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -460,13 +473,23 @@ class InMemoryStorage implements IStorage {
   }
 
   async updateContactInfo(info: InsertContactInfo): Promise<ContactInfo> {
-    this.contactInfoData = {
+    const updatedInfo: ContactInfo = {
       id: this.contactInfoData?.id || Math.random().toString(36).substr(2, 9),
-      ...info,
-      createdAt: this.contactInfoData?.createdAt || new Date(),
+      businessName: info.businessName || "Heaven of Munroe",
+      phone: info.phone || "+91 96338 36839",
+      email: info.email || "heavenofmunroe@gmail.com",
+      address: info.address || "Munroe Island, Kollam District, Kerala, India",
+      whatsappNumber: info.whatsappNumber || "919633836839",
+      facebook: info.facebook || null,
+      instagram: info.instagram || null,
+      googleMaps: info.googleMaps || null,
+      description: info.description || "Get in touch with us for bookings, inquiries, or any questions about our services.",
+      businessHours: info.businessHours || "Available 24/7 for bookings and inquiries",
+      isActive: info.isActive ?? true,
       updatedAt: new Date()
     };
-    return this.contactInfoData;
+    this.contactInfoData = updatedInfo;
+    return updatedInfo;
   }
 
   async getContentSection(sectionKey: string): Promise<ContentSection | null> {
@@ -478,8 +501,10 @@ class InMemoryStorage implements IStorage {
     const section: ContentSection = {
       id: existing?.id || Math.random().toString(36).substr(2, 9),
       sectionKey,
-      ...content,
-      createdAt: existing?.createdAt || new Date(),
+      title: content.title || null,
+      content: content.content,
+      imageUrl: content.imageUrl || null,
+      isActive: content.isActive ?? true,
       updatedAt: new Date()
     };
     this.contentSectionsData.set(sectionKey, section);
